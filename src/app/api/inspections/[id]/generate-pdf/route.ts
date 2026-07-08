@@ -47,7 +47,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
       checklist,
       inspector: inspector ?? null,
     });
-    pdfBuffer = await renderToBuffer(element as unknown as React.ReactElement<import('@react-pdf/renderer').DocumentProps>);
+    pdfBuffer = await renderToBuffer(element as any);
   } catch (err) {
     console.error('PDF render failed', err);
     return NextResponse.json({ error: 'Failed to render PDF' }, { status: 500 });
