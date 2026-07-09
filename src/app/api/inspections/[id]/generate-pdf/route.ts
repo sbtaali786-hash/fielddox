@@ -41,7 +41,10 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
   let pdfBuffer: Buffer;
   try {
     const element = React.createElement(InspectionReport, {
-      company,
+      pdfBuffer = await renderToBuffer(
+  React.createElement(InspectionReport, { company, site, inspection, checklist }) as any
+);
+    
       site,
       inspection,
       checklist,
