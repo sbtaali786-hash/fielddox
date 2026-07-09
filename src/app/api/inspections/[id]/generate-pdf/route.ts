@@ -38,23 +38,22 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     return NextResponse.json({ error: 'Missing related records for report generation' }, { status: 500 });
   }
 
-  let pdfBuffer: Buffer;
-  try {
-    const element = React.createElement(InspectionReport, {
-      pdfBuffer = await renderToBuffer(
-  React.createElement(InspectionReport, { company, site, inspection, checklist }) as any
-);
-    
-      site,
-      inspection,
-      checklist,
-      inspector: inspector ?? null,
-    });
-    pdfBuffer = await renderToBuffer(element as any);
-  } catch (err) {
-    console.error('PDF render failed', err);
-    return NextResponse.json({ error: 'Failed to render PDF' }, { status: 500 });
-  }
+          let pdfBuffer: Buffer;
+    try {
+      const pdfElement = React.createElement(InspectionReport, { 
+        company, 
+        site, 
+        inspection, 
+        checklist,
+        inspector: inspector ?? null
+      }) as any;
+
+      pdfBuffer = await (renderToBuffer as any)(pdfElement);
+    } catch (err) {
+      console.error('PDF render failed', err);
+      return NextResponse.json({ error: 'Failed to render PDF' }, { status: 500 });
+    }
+  
 
   const path = `${profile.company_id}/${inspection.id}.pdf`;
   const { error: uploadError } = await supabase.storage.from('reports').upload(path, pdfBuffer, {
